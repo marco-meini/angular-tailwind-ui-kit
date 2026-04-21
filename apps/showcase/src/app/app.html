@@ -1,0 +1,25 @@
+<main class="min-h-screen bg-slate-50 text-slate-900">
+  <header class="border-b border-slate-200 bg-white">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div>
+        <p class="text-xs uppercase tracking-wide text-slate-500">Angular + Tailwind</p>
+        <h1 class="text-xl font-semibold">UI Kit Showcase</h1>
+      </div>
+      <nav class="flex gap-2">
+        @for (item of navItems; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="bg-slate-900 text-white"
+            [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+            class="rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-200"
+          >
+            {{ item.label }}
+          </a>
+        }
+      </nav>
+    </div>
+  </header>
+  <section class="mx-auto max-w-6xl px-6 py-6">
+    <router-outlet />
+  </section>
+</main>
