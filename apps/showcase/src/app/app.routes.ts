@@ -1,33 +1,19 @@
 import { Routes } from '@angular/router';
+import { SHOWCASE_DEFAULT_COMPONENT_ID } from './showcase-catalog';
 
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () =>
-      import('./routes').then((m) => m.ShowcaseOverviewPageComponent),
+    redirectTo: `components/${SHOWCASE_DEFAULT_COMPONENT_ID}`,
+    pathMatch: 'full',
   },
   {
-    path: 'foundation',
+    path: 'components/:id',
     loadComponent: () =>
-      import('./routes').then((m) => m.ShowcaseFoundationPageComponent),
-  },
-  {
-    path: 'navigation',
-    loadComponent: () =>
-      import('./routes').then((m) => m.ShowcaseNavigationPageComponent),
-  },
-  {
-    path: 'interactive',
-    loadComponent: () =>
-      import('./routes').then((m) => m.ShowcaseInteractivePageComponent),
-  },
-  {
-    path: 'advanced',
-    loadComponent: () =>
-      import('./routes').then((m) => m.ShowcaseAdvancedPageComponent),
+      import('./component-detail-page.component').then((m) => m.ComponentDetailPageComponent),
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: `components/${SHOWCASE_DEFAULT_COMPONENT_ID}`,
   },
 ];

@@ -6,6 +6,7 @@
   border: 1px solid rgb(var(--ui-border));
   border-radius: var(--ui-radius);
   background-color: rgb(var(--ui-bg));
+  color: rgb(var(--ui-fg));
   padding: 1.25rem;
   box-shadow: 0 2px 8px rgb(15 23 42 / 0.06);
 }
@@ -107,6 +108,7 @@
   border: 1px solid rgb(var(--ui-border));
   border-radius: calc(var(--ui-radius) - 2px);
   background-color: rgb(var(--ui-bg));
+  color: rgb(var(--ui-fg));
   box-shadow: 0 8px 24px rgb(15 23 42 / 0.12);
   padding: 0.25rem;
 }
@@ -114,6 +116,7 @@
 .ui-menu-item {
   width: 100%;
   text-align: left;
+  color: rgb(var(--ui-fg));
   border: none;
   background: transparent;
   border-radius: calc(var(--ui-radius) - 4px);

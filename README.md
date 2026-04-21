@@ -1,59 +1,38 @@
-# UiKitWorkspace
+# Tailwind UI Kit Workspace
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
+Angular workspace containing:
 
-## Development server
+- `projects/ui-kit`: standalone UI library (`@your-scope/ui-kit`).
+- `apps/showcase`: demo explorer app.
 
-To start a local development server, run:
+## Component structure
 
-```bash
-ng serve
-```
+The library uses a file-per-component strategy.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Every component class lives in its own file under `projects/ui-kit/src/lib/components`.
+- Public exports are centralized in `projects/ui-kit/src/lib/index.ts`.
+- Category-based aggregator files are not used.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Run the showcase
 
 ```bash
-ng generate --help
+npm install
+npx ng serve showcase
 ```
 
-## Building
+Open `http://localhost:4200` and use the sidebar to browse the complete component list.  
+Each route renders one component at a time: `/components/:id`.
 
-To build the project run:
+## Build
+
+Build the library:
 
 ```bash
-ng build
+npx ng build ui-kit
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Build the demo app:
 
 ```bash
-ng test
+npx ng build showcase
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

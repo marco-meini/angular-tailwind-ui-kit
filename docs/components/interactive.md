@@ -1,17 +1,16 @@
 # Interactive components
 
-## Accordion
-- Use `UiAccordionComponent` for collapsible FAQ-like sections.
-- Supports keyboard activation with `Space` and `Enter`.
+## Notes
+- Ogni componente ha classe e file dedicato sotto `projects/ui-kit/src/lib/components`.
+- La demo explorer espone tutti i componenti in sidebar e preview singola.
 
-## Collapsible
-- `UiCollapsibleComponent` wraps short expandable blocks.
-- Exposes a `toggle()` method for imperative control.
+## Components
+- `UiDropdownComponent`
+- `UiDialogComponent`
+- `UiAlertDialogComponent`
+- `UiAccordionComponent`
+- `UiAccordionItemComponent`
+- `UiCollapsibleComponent`
 
-## Dropdown
-- `UiDropdownComponent` emits `selectionChange` with the selected item.
-- Includes click-away close behavior and focus-safe trigger.
-
-## Dialog / Alert Dialog
-- `UiDialogComponent` and `UiAlertDialogComponent` are lightweight wrappers on CDK Dialog.
-- Default actions support cancel/confirm flows with emitted events.
+## Directive
+- `UiInteractiveStateDirective`

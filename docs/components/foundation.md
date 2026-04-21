@@ -1,8 +1,13 @@
 # Foundation components
 
-Questo documento copre il primo batch di componenti base e form presenti in `@your-scope/ui-kit`.
+Componenti base e form disponibili in `@your-scope/ui-kit`.
 
-## Componenti disponibili
+## Notes
+
+- Ogni componente vive in un file dedicato sotto `projects/ui-kit/src/lib/components`.
+- La demo mostra un componente alla volta in `apps/showcase` tramite route `/components/:id`.
+
+## Components
 
 - `UiBadgeComponent`
 - `UiAlertComponent`
@@ -15,18 +20,3 @@ Questo documento copre il primo batch di componenti base e form presenti in `@yo
 - `UiCheckboxComponent`
 - `UiSwitchComponent`
 - `UiRadioGroupComponent`
-
-## Pattern API condiviso
-
-Ogni componente usa il pattern:
-
-- `variant`: `default | primary | secondary | ghost | danger | outline`
-- `size`: `sm | md | lg`
-- `state`: `default | success | warning | danger`
-- flag opzionali: `disabled`, `invalid`, `loading`
-
-## Snippet rapido
-
-`<ui-input [invalid]="true" placeholder="Email"></ui-input>`
-
-`<ui-badge variant="secondary">Beta</ui-badge>`
