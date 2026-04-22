@@ -16,9 +16,9 @@ import { UiTypeaheadComponent } from './ui-typeahead.component';
       <ui-combobox label="Combobox" [items]="options" (valueChange)="combobox = $event" />
       <ui-select-search label="Select + Search" [items]="options" (valueChange)="select = $event" />
       <ui-typeahead label="Typeahead" [items]="options" (valueChange)="typeahead = $event" />
-      <ui-datepicker label="Datepicker" (valueChange)="date = $event" />
+      <ui-datepicker label="Datepicker" [nullable]="true" (valueChange)="date = $event" />
       <p class="text-xs text-slate-600">
-        combobox={{ combobox || '-' }} select={{ select || '-' }} typeahead={{ typeahead || '-' }} date={{ date || '-' }}
+        combobox={{ combobox ?? '-' }} select={{ select ?? '-' }} typeahead={{ typeahead ?? '-' }} date={{ date === null ? 'null' : (date || '-') }}
       </p>
     </section>
   `,
@@ -31,8 +31,8 @@ export class UiAdvancedDemoStateComponent {
     { value: 'svelte', label: 'Svelte' },
   ];
 
-  combobox = '';
-  select = '';
-  typeahead = '';
-  date = '';
+  combobox: string | null = null;
+  select: string | null = null;
+  typeahead: string | null = null;
+  date: string | null = null;
 }

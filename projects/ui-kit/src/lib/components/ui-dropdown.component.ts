@@ -29,7 +29,7 @@ import type { UiSize, UiVariant } from '../core/tokens';
       [cdkConnectedOverlayHasBackdrop]="true"
       (backdropClick)="close()"
     >
-      <div class="mt-2 min-w-48 rounded-md border border-slate-200 bg-white p-2 shadow-lg" role="menu">
+      <div class="ui-popover-surface mt-2 min-w-48 rounded-md border border-slate-200 bg-white p-2 shadow-lg" role="menu">
         <ng-content />
       </div>
     </ng-template>

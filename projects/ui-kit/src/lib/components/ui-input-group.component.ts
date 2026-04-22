@@ -8,7 +8,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
       @if (prefix) {
         <span class="text-sm text-slate-500">{{ prefix }}</span>
       }
-      <input class="ui-input" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" />
+      <input
+        class="ui-input border border-[rgb(var(--ui-border))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500"
+        [placeholder]="placeholder"
+        [value]="value"
+        (input)="onInput($event)"
+      />
       @if (suffix) {
         <span class="text-sm text-slate-500">{{ suffix }}</span>
       }

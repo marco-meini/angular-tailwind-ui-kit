@@ -1,6 +1,10 @@
 :root {
   --ui-bg: 2 6 23;
   --ui-fg: 248 250 252;
+  /* For controls on white / light panels (modals, popovers) while the app shell stays dark */
+  --ui-fg-on-light: 15 23 42;
+  --ui-border-on-light: 203 213 225;
+  --ui-muted-on-light: 241 245 249;
   --ui-muted: 30 41 59;
   --ui-border: 71 85 105;
   --ui-primary: 34 211 238;

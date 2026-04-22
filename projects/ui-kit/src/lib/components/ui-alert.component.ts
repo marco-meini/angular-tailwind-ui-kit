@@ -27,7 +27,7 @@ export class UiAlertComponent {
   protected readonly classes = computed(() =>
     uiVariantClasses(
       {
-        base: 'rounded-xl border p-4 space-y-2',
+        base: 'rounded-xl border p-3 space-y-2 text-slate-900',
         states: {
           default: 'border-[rgb(var(--ui-border))] bg-white',
           success: 'border-[rgb(var(--ui-success))] bg-[color-mix(in_srgb,rgb(var(--ui-success))_8%,white)]',

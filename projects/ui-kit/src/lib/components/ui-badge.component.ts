@@ -24,7 +24,7 @@ export class UiBadgeComponent {
           secondary: 'bg-[rgb(var(--ui-primary))] text-white',
           danger: 'bg-[rgb(var(--ui-danger))] text-white',
           ghost: 'bg-transparent text-[rgb(var(--ui-fg))] border border-[rgb(var(--ui-border))]',
-          outline: 'bg-white border border-[rgb(var(--ui-border))] text-[rgb(var(--ui-fg))]',
+          outline: 'bg-white border border-[rgb(var(--ui-border-on-light))] text-[rgb(var(--ui-fg-on-light))]',
         },
         sizes: {
           sm: 'text-xs px-2 py-0.5',

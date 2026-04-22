@@ -26,7 +26,14 @@
   line-height: 1;
 }
 
-.ui-input,
+.ui-input {
+  width: 100%;
+  border-radius: calc(var(--ui-radius) - 2px);
+  font-size: 0.875rem;
+  padding: 0.625rem 0.75rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
 .ui-textarea,
 .ui-field {
   width: 100%;
@@ -79,6 +86,38 @@
   color: rgb(var(--ui-fg));
 }
 
+.ui-button--danger {
+  background-color: rgb(var(--ui-danger));
+  color: #fff;
+}
+
+.ui-button--danger:hover {
+  filter: brightness(0.92);
+}
+
+/*
+ * Modals / white popovers: global --ui-fg stays light for the dark shell, but children
+ * must use "on light" ink. Scope fixes here instead of overriding --ui-fg on the whole panel
+ * (nested form controls may still use dark surfaces).
+ */
+.ui-popover-surface .ui-button--outline {
+  border-color: rgb(var(--ui-border-on-light));
+  color: rgb(var(--ui-fg-on-light));
+}
+
+.ui-popover-surface .ui-button--outline:hover {
+  background-color: rgb(var(--ui-muted-on-light));
+}
+
+.ui-popover-surface .ui-menu-item {
+  color: rgb(var(--ui-fg-on-light));
+}
+
+.ui-popover-surface .ui-menu-item:hover,
+.ui-popover-surface .ui-menu-item--active {
+  background-color: rgb(var(--ui-muted-on-light));
+}
+
 .ui-stack {
   display: flex;
   flex-direction: column;
@@ -127,4 +166,9 @@
 .ui-menu-item:hover,
 .ui-menu-item--active {
   background-color: rgb(var(--ui-muted));
+}
+
+.ui-menu-item--muted {
+  font-style: italic;
+  color: rgb(var(--ui-border));
 }

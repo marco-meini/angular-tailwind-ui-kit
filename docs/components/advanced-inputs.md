@@ -9,4 +9,3 @@
 - `UiSelectSearchComponent`
 - `UiTypeaheadComponent`
 - `UiDatepickerComponent`
-- `UiAdvancedDemoStateComponent`

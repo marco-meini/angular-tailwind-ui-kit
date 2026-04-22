@@ -1,5 +1,6 @@
 export const uiFieldTriggerConfig = {
-  base: 'ui-input',
+  base:
+    'ui-input border border-[rgb(var(--ui-border))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500',
   variants: {
     default: '',
     primary: '',

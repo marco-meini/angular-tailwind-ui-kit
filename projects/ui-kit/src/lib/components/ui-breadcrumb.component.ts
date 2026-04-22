@@ -11,13 +11,13 @@ export interface UiBreadcrumbItem {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <nav class="flex items-center gap-2 text-sm text-slate-600" aria-label="Breadcrumb">
+    <nav class="flex items-center gap-2 text-sm text-slate-500" aria-label="Breadcrumb">
       @for (item of items; track item.label; let isLast = $last) {
         @if (!isLast) {
-          <a [href]="item.href || '#'" class="transition hover:text-slate-900">{{ item.label }}</a>
-          <span class="text-slate-400">/</span>
+          <a [href]="item.href || '#'" class="text-slate-400 transition hover:text-[rgb(var(--ui-fg))]">{{ item.label }}</a>
+          <span class="text-slate-600">/</span>
         } @else {
-          <span class="font-medium text-slate-900">{{ item.label }}</span>
+          <span class="font-medium text-[rgb(var(--ui-fg))]" aria-current="page">{{ item.label }}</span>
         }
       }
     </nav>

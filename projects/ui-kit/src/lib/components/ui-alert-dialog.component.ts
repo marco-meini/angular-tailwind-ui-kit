@@ -6,7 +6,15 @@ import { UiDialogComponent } from './ui-dialog.component';
   standalone: true,
   imports: [UiDialogComponent],
   template: `
-    <ui-dialog [isOpen]="isOpen" [title]="title" (close)="close.emit()" (confirm)="confirm.emit()">
+    <ui-dialog
+      [isOpen]="isOpen"
+      [title]="title"
+      [cancelLabel]="cancelLabel"
+      [confirmLabel]="confirmLabel"
+      confirmVariant="danger"
+      (close)="close.emit()"
+      (confirm)="confirm.emit()"
+    >
       <p class="text-sm text-slate-600">{{ message }}</p>
     </ui-dialog>
   `,
@@ -14,6 +22,8 @@ import { UiDialogComponent } from './ui-dialog.component';
 export class UiAlertDialogComponent {
   @Input() title = 'Are you sure?';
   @Input() message = 'This action cannot be undone.';
+  @Input() cancelLabel = 'Cancel';
+  @Input() confirmLabel = 'Delete';
   @Input() isOpen = false;
   @Output() readonly close = new EventEmitter<void>();
   @Output() readonly confirm = new EventEmitter<void>();

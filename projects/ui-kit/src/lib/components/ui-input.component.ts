@@ -36,12 +36,17 @@ export class UiInputComponent {
       {
         base: 'ui-input',
         variants: {
-          outline: 'border border-[rgb(var(--ui-border))] bg-white',
-          default: 'border border-[rgb(var(--ui-border))] bg-white',
-          ghost: 'border border-transparent bg-[rgb(var(--ui-muted))]',
-          primary: 'border border-[rgb(var(--ui-primary))] bg-white',
-          secondary: 'border border-[rgb(var(--ui-primary))] bg-white',
-          danger: 'border border-[rgb(var(--ui-danger))] bg-white',
+          outline:
+            'border border-[rgb(var(--ui-border-on-light))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+          default:
+            'border border-[rgb(var(--ui-border-on-light))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+          ghost: 'border border-transparent bg-[rgb(var(--ui-muted))] text-[rgb(var(--ui-fg))] placeholder:text-[rgb(var(--ui-border))]',
+          primary:
+            'border border-[rgb(var(--ui-primary))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+          secondary:
+            'border border-[rgb(var(--ui-primary))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+          danger:
+            'border border-[rgb(var(--ui-danger))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
         },
         sizes: {
           sm: 'h-8 text-sm',

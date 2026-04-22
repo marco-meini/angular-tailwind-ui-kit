@@ -6,7 +6,6 @@ export interface ShowcaseCatalogItem {
 export const SHOWCASE_CATALOG: ShowcaseCatalogItem[] = [
   { id: 'ui-accordion', label: 'UiAccordionComponent' },
   { id: 'ui-accordion-item', label: 'UiAccordionItemComponent' },
-  { id: 'ui-advanced-demo-state', label: 'UiAdvancedDemoStateComponent' },
   { id: 'ui-alert', label: 'UiAlertComponent' },
   { id: 'ui-alert-dialog', label: 'UiAlertDialogComponent' },
   { id: 'ui-badge', label: 'UiBadgeComponent' },

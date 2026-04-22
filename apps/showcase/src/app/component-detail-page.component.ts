@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   UiAccordionComponent,
   UiAccordionItemComponent,
-  UiAdvancedDemoStateComponent,
   UiAlertComponent,
   UiAlertDialogComponent,
   UiBadgeComponent,
@@ -37,7 +36,6 @@ import { SHOWCASE_CATALOG } from './showcase-catalog';
     CommonModule,
     UiAccordionComponent,
     UiAccordionItemComponent,
-    UiAdvancedDemoStateComponent,
     UiAlertComponent,
     UiAlertDialogComponent,
     UiBadgeComponent,
@@ -82,9 +80,10 @@ import { SHOWCASE_CATALOG } from './showcase-catalog';
               </div>
             }
             @case ('ui-alert') {
-              <div class="space-y-3">
+              <div class="flex flex-col gap-6">
                 <ui-alert title="Default alert" description="Base alert styling." />
                 <ui-alert title="Warning alert" description="State-aware variants." state="warning" />
+                <ui-alert title="Error alert" description="Use the danger state for failures and validation errors." state="danger" />
               </div>
             }
             @case ('ui-spinner') {
@@ -176,23 +175,61 @@ import { SHOWCASE_CATALOG } from './showcase-catalog';
               </ui-collapsible>
             }
             @case ('ui-combobox') {
-              <ui-combobox label="Framework" [items]="frameworks" [value]="framework" (valueChange)="framework = $event" />
-              <p class="text-sm text-slate-500">value={{ framework || '-' }}</p>
+              <div class="space-y-6">
+                <div class="space-y-2">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">With nullable</p>
+                  <ui-combobox
+                    label="Framework"
+                    [items]="frameworks"
+                    [value]="comboboxNullable"
+                    [nullable]="true"
+                    nullLabel="No framework"
+                    (valueChange)="comboboxNullable = $event"
+                  />
+                  <p class="text-sm text-slate-500">value={{ comboboxNullable === null ? 'null' : comboboxNullable }}</p>
+                </div>
+                <div class="space-y-2">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Without nullable</p>
+                  <ui-combobox
+                    label="Framework"
+                    [items]="frameworks"
+                    [value]="comboboxNotNullable"
+                    (valueChange)="comboboxNotNullable = $event"
+                  />
+                  <p class="text-sm text-slate-500">value={{ comboboxNotNullable ?? '-' }}</p>
+                </div>
+              </div>
             }
             @case ('ui-select-search') {
               <ui-select-search label="Role" [items]="roles" [value]="role" (valueChange)="role = $event" />
-              <p class="text-sm text-slate-500">value={{ role || '-' }}</p>
+              <p class="text-sm text-slate-500">value={{ role ?? '-' }}</p>
             }
             @case ('ui-typeahead') {
               <ui-typeahead label="Dependency" [items]="dependencies" [value]="dependency" (valueChange)="dependency = $event" />
-              <p class="text-sm text-slate-500">value={{ dependency || '-' }}</p>
+              <p class="text-sm text-slate-500">value={{ dependency ?? '-' }}</p>
             }
             @case ('ui-datepicker') {
-              <ui-datepicker label="Release date" [value]="releaseDate" (valueChange)="releaseDate = $event" />
-              <p class="text-sm text-slate-500">value={{ releaseDate || '-' }}</p>
-            }
-            @case ('ui-advanced-demo-state') {
-              <ui-advanced-demo-state />
+              <div class="space-y-6">
+                <div class="space-y-2">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">With nullable</p>
+                  <ui-datepicker
+                    label="Release date"
+                    [value]="datePickerNullable"
+                    [nullable]="true"
+                    (valueChange)="datePickerNullable = $event"
+                  />
+                  <p class="text-sm text-slate-500">value={{ datePickerNullable === null ? 'null' : datePickerNullable }}</p>
+                </div>
+                <div class="space-y-2">
+                  <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Without nullable</p>
+                  <ui-datepicker
+                    label="Release date"
+                    [value]="datePickerNotNullable"
+                    (valueChange)="datePickerNotNullable = $event"
+                  />
+                  <p class="text-sm text-slate-500">value={{ datePickerNotNullable === null ? 'null' : datePickerNotNullable }}</p>
+                </div>
+              </div>
             }
           }
         </div>
@@ -237,10 +274,12 @@ export class ComponentDetailPageComponent {
   page = 2;
   dialogOpen = false;
   alertDialogOpen = false;
-  framework = '';
-  role = '';
-  dependency = '';
-  releaseDate = '';
+  comboboxNullable: string | null = null;
+  comboboxNotNullable: string | null = null;
+  role: string | null = null;
+  dependency: string | null = null;
+  datePickerNullable: string | null = null;
+  datePickerNotNullable: string | null = null;
 
   readonly sizeOptions = [
     { label: 'Small', value: 'sm' },
@@ -282,6 +321,8 @@ export class ComponentDetailPageComponent {
   ];
 
   constructor() {
+    this.comboboxNotNullable = this.frameworks[0]?.value ?? null;
+    this.datePickerNotNullable = this.defaultIsoDate();
     this.route.paramMap.subscribe((params) => {
       this.activeId = params.get('id') ?? this.activeId;
     });
@@ -314,5 +355,13 @@ export class ComponentDetailPageComponent {
       return;
     }
     this.router.navigate(['/components', componentId]);
+  }
+
+  private defaultIsoDate(): string {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 }
