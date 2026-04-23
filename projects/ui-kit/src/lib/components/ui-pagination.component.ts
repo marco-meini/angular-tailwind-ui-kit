@@ -10,7 +10,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       <button type="button" class="ui-button ui-button--outline px-3 py-1 text-xs" [disabled]="page <= 1" (click)="goTo(page - 1)">
         Previous
       </button>
-      <span class="text-sm text-slate-700">Page {{ page }} / {{ totalPages }}</span>
+      <span class="text-sm text-slate-300">Page {{ page }} / {{ totalPages }}</span>
       <button type="button" class="ui-button ui-button--outline px-3 py-1 text-xs" [disabled]="page >= totalPages" (click)="goTo(page + 1)">
         Next
       </button>
