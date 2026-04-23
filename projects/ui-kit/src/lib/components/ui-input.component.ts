@@ -37,16 +37,16 @@ export class UiInputComponent {
         base: 'ui-input',
         variants: {
           outline:
-            'border border-[rgb(var(--ui-border-on-light))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+            'border border-[rgb(var(--ui-border))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500',
           default:
-            'border border-[rgb(var(--ui-border-on-light))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+            'border border-[rgb(var(--ui-border))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500',
           ghost: 'border border-transparent bg-[rgb(var(--ui-muted))] text-[rgb(var(--ui-fg))] placeholder:text-[rgb(var(--ui-border))]',
           primary:
-            'border border-[rgb(var(--ui-primary))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+            'border border-[rgb(var(--ui-primary))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500',
           secondary:
-            'border border-[rgb(var(--ui-primary))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+            'border border-[rgb(var(--ui-primary))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500',
           danger:
-            'border border-[rgb(var(--ui-danger))] bg-white text-[rgb(var(--ui-fg-on-light))] placeholder:text-[rgb(var(--ui-border-on-light))]',
+            'border border-[rgb(var(--ui-danger))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500',
         },
         sizes: {
           sm: 'h-8 text-sm',
@@ -54,7 +54,7 @@ export class UiInputComponent {
           lg: 'h-12 text-base',
         },
         states: {
-          success: 'ring-2 ring-[color-mix(in_srgb,rgb(var(--ui-success))_25%,transparent)]',
+          success: 'ring-2 ring-[color-mix(in_srgb,rgb(var(--ui-success))_30%,transparent)]',
           warning: 'ring-2 ring-[color-mix(in_srgb,rgb(var(--ui-warning))_25%,transparent)]',
           danger: 'ring-2 ring-[color-mix(in_srgb,rgb(var(--ui-danger))_25%,transparent)]',
         },

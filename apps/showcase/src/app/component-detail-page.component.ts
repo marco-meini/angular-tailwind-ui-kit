@@ -107,10 +107,19 @@ import { SHOWCASE_CATALOG } from './showcase-catalog';
               <ui-input-group prefix="@" suffix=".npm" placeholder="your-scope/ui-kit" />
             }
             @case ('ui-input') {
-              <div class="space-y-3">
-                <ui-input placeholder="Standard input" />
-                <ui-input variant="ghost" placeholder="Ghost input" />
-                <ui-input state="success" placeholder="Success state" />
+              <div class="space-y-5">
+                <div class="space-y-1">
+                  <p class="text-xs uppercase tracking-wide text-slate-500">Standard</p>
+                  <ui-input placeholder="Standard input" />
+                </div>
+                <div class="space-y-1">
+                  <p class="text-xs uppercase tracking-wide text-slate-500">Ghost variant</p>
+                  <ui-input variant="ghost" placeholder="Ghost input" />
+                </div>
+                <div class="space-y-1">
+                  <p class="text-xs uppercase tracking-wide text-slate-500">Success state</p>
+                  <ui-input state="success" value="Saved value" placeholder="Success state" />
+                </div>
               </div>
             }
             @case ('ui-textarea') {
