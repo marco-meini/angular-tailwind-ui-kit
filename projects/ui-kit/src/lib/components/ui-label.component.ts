@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 @Component({
   selector: 'ui-label',
   standalone: true,
-  template: `<label [for]="forId" class="ui-label">{{ text }}<ng-content /></label>`,
+  templateUrl: './ui-label.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiLabelComponent {

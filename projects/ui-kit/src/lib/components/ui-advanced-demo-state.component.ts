@@ -10,18 +10,7 @@ import { UiTypeaheadComponent } from './ui-typeahead.component';
   standalone: true,
   imports: [CommonModule, UiComboboxComponent, UiSelectSearchComponent, UiTypeaheadComponent, UiDatepickerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <section class="ui-card space-y-3">
-      <h3 class="font-semibold">Advanced inputs demo</h3>
-      <ui-combobox label="Combobox" [items]="options" (valueChange)="combobox = $event" />
-      <ui-select-search label="Select + Search" [items]="options" (valueChange)="select = $event" />
-      <ui-typeahead label="Typeahead" [items]="options" (valueChange)="typeahead = $event" />
-      <ui-datepicker label="Datepicker" [nullable]="true" (valueChange)="date = $event" />
-      <p class="text-xs text-slate-600">
-        combobox={{ combobox ?? '-' }} select={{ select ?? '-' }} typeahead={{ typeahead ?? '-' }} date={{ date === null ? 'null' : (date || '-') }}
-      </p>
-    </section>
-  `,
+  templateUrl: './ui-advanced-demo-state.component.html',
 })
 export class UiAdvancedDemoStateComponent {
   options: UiOption[] = [

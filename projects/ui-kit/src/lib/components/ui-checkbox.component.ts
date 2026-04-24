@@ -3,12 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 @Component({
   selector: 'ui-checkbox',
   standalone: true,
-  template: `
-    <label class="inline-flex items-center gap-2 text-sm text-[rgb(var(--ui-fg))]">
-      <input type="checkbox" class="h-4 w-4 rounded border-[rgb(var(--ui-border))]" [checked]="checked" [disabled]="disabled" (change)="onToggle($event)" />
-      <span>{{ label }}<ng-content /></span>
-    </label>
-  `,
+  templateUrl: './ui-checkbox.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiCheckboxComponent {

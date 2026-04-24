@@ -3,23 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 @Component({
   selector: 'ui-input-group',
   standalone: true,
-  template: `
-    <div class="ui-input-group">
-      @if (prefix) {
-        <span class="text-sm text-slate-500">{{ prefix }}</span>
-      }
-      <input
-        class="ui-input border border-[rgb(var(--ui-border))] bg-[rgb(var(--ui-bg))] text-[rgb(var(--ui-fg))] placeholder:text-slate-500"
-        [placeholder]="placeholder"
-        [value]="value"
-        (input)="onInput($event)"
-      />
-      @if (suffix) {
-        <span class="text-sm text-slate-500">{{ suffix }}</span>
-      }
-      <ng-content />
-    </div>
-  `,
+  templateUrl: './ui-input-group.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiInputGroupComponent {

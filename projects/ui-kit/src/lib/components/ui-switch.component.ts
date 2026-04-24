@@ -3,21 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 @Component({
   selector: 'ui-switch',
   standalone: true,
-  template: `
-    <label class="inline-flex items-center gap-2">
-      <button
-        type="button"
-        role="switch"
-        [attr.aria-checked]="checked"
-        [disabled]="disabled"
-        [class]="trackClasses()"
-        (click)="toggle()"
-      >
-        <span [class]="thumbClasses()"></span>
-      </button>
-      <span class="text-sm text-[rgb(var(--ui-fg))]">{{ label }}</span>
-    </label>
-  `,
+  templateUrl: './ui-switch.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiSwitchComponent {

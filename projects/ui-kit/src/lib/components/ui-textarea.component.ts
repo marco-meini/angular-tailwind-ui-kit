@@ -3,17 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 @Component({
   selector: 'ui-textarea',
   standalone: true,
-  template: `
-    <textarea
-      [id]="id"
-      [rows]="rows"
-      [placeholder]="placeholder"
-      [disabled]="disabled"
-      class="ui-textarea"
-      [value]="value"
-      (input)="onInput($event)"
-    ></textarea>
-  `,
+  templateUrl: './ui-textarea.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiTextareaComponent {

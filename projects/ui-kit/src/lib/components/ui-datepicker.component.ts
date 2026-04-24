@@ -26,33 +26,7 @@ import { uiFieldTriggerConfig } from './ui-field-trigger-config';
   standalone: true,
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="space-y-2">
-      @if (label) {
-        <label class="ui-label">{{ label }}</label>
-      }
-      <div class="relative">
-        <input
-          #dateInput
-          type="text"
-          [class]="inputClasses"
-          [attr.placeholder]="placeholder"
-          [disabled]="disabled"
-        />
-        @if (showClear) {
-          <button
-            type="button"
-            class="absolute right-1.5 top-1/2 z-10 -translate-y-1/2 rounded p-0.5 text-slate-400 transition hover:text-[rgb(var(--ui-fg))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ui-primary))]"
-            (click)="clearValue($event)"
-            aria-label="Clear date"
-            title="Clear date"
-          >
-            <span class="text-lg leading-none" aria-hidden="true">×</span>
-          </button>
-        }
-      </div>
-    </div>
-  `,
+  templateUrl: './ui-datepicker.component.html',
 })
 export class UiDatepickerComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() label = '';

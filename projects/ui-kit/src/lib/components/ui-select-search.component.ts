@@ -7,25 +7,7 @@ import { UiComboboxComponent, type UiOption } from './ui-combobox.component';
   standalone: true,
   imports: [UiComboboxComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <ui-combobox
-      [label]="label"
-      [placeholder]="placeholder"
-      [options]="options"
-      [nullable]="nullable"
-      [nullMenuOption]="nullMenuOption"
-      [nullLabel]="nullLabel"
-      [variant]="variant"
-      [size]="size"
-      [state]="state"
-      [disabled]="disabled"
-      [invalid]="invalid"
-      [loading]="loading"
-      [value]="value"
-      (valueChange)="onValueChange($event)"
-      (queryChange)="queryChange.emit($event)"
-    />
-  `,
+  templateUrl: './ui-select-search.component.html',
 })
 export class UiSelectSearchComponent {
   @Input() label = '';

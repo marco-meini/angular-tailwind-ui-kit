@@ -5,11 +5,7 @@ import { UI_DEFAULTS, type UiSize } from '../core/tokens';
 @Component({
   selector: 'ui-spinner',
   standalone: true,
-  template: `
-    <span [class]="classes()" role="status" aria-label="Loading">
-      <span class="sr-only">Loading</span>
-    </span>
-  `,
+  templateUrl: './ui-spinner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiSpinnerComponent {

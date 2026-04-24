@@ -10,15 +10,7 @@ export interface UiAccordionEntry {
   selector: 'ui-accordion',
   standalone: true,
   imports: [UiAccordionItemComponent],
-  template: `
-    <section class="space-y-2">
-      @for (item of items; track item.title) {
-        <ui-accordion-item [title]="item.title">
-          {{ item.content }}
-        </ui-accordion-item>
-      }
-    </section>
-  `,
+  templateUrl: './ui-accordion.component.html',
 })
 export class UiAccordionComponent {
   @Input() items: UiAccordionEntry[] = [];

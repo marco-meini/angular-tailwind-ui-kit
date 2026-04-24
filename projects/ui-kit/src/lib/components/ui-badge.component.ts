@@ -5,7 +5,7 @@ import { UI_DEFAULTS, type UiSize, type UiState, type UiVariant } from '../core/
 @Component({
   selector: 'ui-badge',
   standalone: true,
-  template: `<span [class]="classes()"><ng-content /></span>`,
+  templateUrl: './ui-badge.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiBadgeComponent {

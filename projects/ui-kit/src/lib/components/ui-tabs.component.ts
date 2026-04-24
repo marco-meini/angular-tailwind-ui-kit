@@ -6,21 +6,7 @@ import { cx } from '../core/class-variants';
   selector: 'ui-tabs',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="inline-flex rounded-lg bg-slate-100 p-1" role="tablist">
-      @for (tab of tabs; track tab.id) {
-        <button
-          type="button"
-          role="tab"
-          [attr.aria-selected]="tab.id === active"
-          (click)="select(tab.id)"
-          [class]="tabClass(tab.id === active)"
-        >
-          {{ tab.label }}
-        </button>
-      }
-    </div>
-  `,
+  templateUrl: './ui-tabs.component.html',
 })
 export class UiTabsComponent {
   @Input() tabs: Array<{ id: string; label: string }> = [

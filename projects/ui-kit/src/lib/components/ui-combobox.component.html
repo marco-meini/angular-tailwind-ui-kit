@@ -1,0 +1,58 @@
+    <div class="space-y-2">
+      @if (label) {
+        <label class="ui-label">{{ label }}</label>
+      }
+      <div class="relative" cdkOverlayOrigin #origin="cdkOverlayOrigin">
+        <input
+          [class]="triggerClasses"
+          [attr.placeholder]="placeholder"
+          [disabled]="disabled"
+          [(ngModel)]="query"
+          (input)="onQueryChange()"
+          (focus)="onFocusInput()"
+          (keydown.arrowdown)="onArrowDown($event)"
+          (keydown.arrowup)="onArrowUp($event)"
+          (keydown.enter)="selectHighlighted($event)"
+          (keydown.escape)="open = false"
+        />
+        @if (showClear) {
+          <button
+            type="button"
+            class="absolute right-1.5 top-1/2 z-10 -translate-y-1/2 rounded p-0.5 text-slate-400 transition hover:text-[rgb(var(--ui-fg))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--ui-primary))]"
+            (click)="clearValue($event)"
+            aria-label="Clear selection"
+            title="Clear selection"
+          >
+            <span class="text-lg leading-none" aria-hidden="true">×</span>
+          </button>
+        }
+      </div>
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="origin"
+        [cdkConnectedOverlayOpen]="open && (menuOptions.length > 0 || (remoteFilter && loading))"
+        [cdkConnectedOverlayPositions]="positions"
+        (overlayOutsideClick)="open = false"
+      >
+        <div class="ui-menu w-80 max-h-64 overflow-auto">
+          @if (remoteFilter && loading && menuOptions.length === 0) {
+            <div class="ui-menu-item ui-menu-item--muted cursor-default" aria-live="polite">
+              Searching...
+            </div>
+          }
+          @for (option of menuOptions; track option.value; let idx = $index) {
+            <button
+              class="ui-menu-item"
+              [class.ui-menu-item--active]="idx === highlightedIndex"
+              [class.ui-menu-item--muted]="isNullOption(option)"
+              type="button"
+              [disabled]="option.disabled"
+              (mouseenter)="highlightedIndex = idx"
+              (click)="selectOption(option)"
+            >
+              {{ option.label }}
+            </button>
+          }
+        </div>
+      </ng-template>
+    </div>

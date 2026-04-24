@@ -1,0 +1,9 @@
+    <section [class]="classes()" role="alert">
+      @if (title) {
+        <h3 class="text-sm font-semibold">{{ title }}</h3>
+      }
+      @if (description) {
+        <p class="text-sm opacity-90">{{ description }}</p>
+      }
+      <div class="text-sm opacity-90"><ng-content /></div>
+    </section>

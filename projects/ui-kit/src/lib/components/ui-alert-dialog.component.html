@@ -1,0 +1,11 @@
+    <ui-dialog
+      [isOpen]="isOpen"
+      [title]="title"
+      [cancelLabel]="cancelLabel"
+      [confirmLabel]="confirmLabel"
+      confirmVariant="danger"
+      (close)="close.emit()"
+      (confirm)="confirm.emit()"
+    >
+      <p class="text-sm text-slate-600">{{ message }}</p>
+    </ui-dialog>

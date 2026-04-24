@@ -7,33 +7,7 @@ import type { UiSize, UiVariant } from '../core/tokens';
   selector: 'ui-dropdown',
   standalone: true,
   imports: [CdkOverlayOrigin, CdkConnectedOverlay],
-  template: `
-    <div class="relative inline-block" cdkOverlayOrigin #origin="cdkOverlayOrigin">
-      <button
-        type="button"
-        class="ui-field inline-flex cursor-pointer items-center gap-2"
-        [class]="triggerClasses()"
-        (click)="toggle()"
-        [attr.aria-expanded]="open()"
-        aria-haspopup="menu"
-      >
-        {{ label }}
-        <span aria-hidden="true">▾</span>
-      </button>
-    </div>
-
-    <ng-template
-      cdkConnectedOverlay
-      [cdkConnectedOverlayOpen]="open()"
-      [cdkConnectedOverlayOrigin]="origin"
-      [cdkConnectedOverlayHasBackdrop]="true"
-      (backdropClick)="close()"
-    >
-      <div class="ui-popover-surface mt-2 min-w-48 rounded-md border border-slate-200 bg-white p-2 shadow-lg" role="menu">
-        <ng-content />
-      </div>
-    </ng-template>
-  `,
+  templateUrl: './ui-dropdown.component.html',
 })
 export class UiDropdownComponent {
   @Input() label = 'Actions';

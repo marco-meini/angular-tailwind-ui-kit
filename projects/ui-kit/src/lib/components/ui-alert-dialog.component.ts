@@ -5,19 +5,7 @@ import { UiDialogComponent } from './ui-dialog.component';
   selector: 'ui-alert-dialog',
   standalone: true,
   imports: [UiDialogComponent],
-  template: `
-    <ui-dialog
-      [isOpen]="isOpen"
-      [title]="title"
-      [cancelLabel]="cancelLabel"
-      [confirmLabel]="confirmLabel"
-      confirmVariant="danger"
-      (close)="close.emit()"
-      (confirm)="confirm.emit()"
-    >
-      <p class="text-sm text-slate-600">{{ message }}</p>
-    </ui-dialog>
-  `,
+  templateUrl: './ui-alert-dialog.component.html',
 })
 export class UiAlertDialogComponent {
   @Input() title = 'Are you sure?';

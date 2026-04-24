@@ -5,17 +5,7 @@ import { UI_DEFAULTS, type UiState } from '../core/tokens';
 @Component({
   selector: 'ui-alert',
   standalone: true,
-  template: `
-    <section [class]="classes()" role="alert">
-      @if (title) {
-        <h3 class="text-sm font-semibold">{{ title }}</h3>
-      }
-      @if (description) {
-        <p class="text-sm opacity-90">{{ description }}</p>
-      }
-      <div class="text-sm opacity-90"><ng-content /></div>
-    </section>
-  `,
+  templateUrl: './ui-alert.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiAlertComponent {

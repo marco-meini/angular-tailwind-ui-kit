@@ -6,11 +6,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   host: {
     class: 'block w-full',
   },
-  template: `
-    <div class="h-2 w-full overflow-hidden rounded-full bg-[rgb(var(--ui-muted))]" [attr.aria-valuenow]="value">
-      <div class="h-full rounded-full bg-[rgb(var(--ui-primary))] transition-all duration-300" [style.width.%]="safeValue"></div>
-    </div>
-  `,
+  templateUrl: './ui-progress.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiProgressComponent {

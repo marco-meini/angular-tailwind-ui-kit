@@ -5,17 +5,7 @@ import { UI_DEFAULTS, type UiSize, type UiState, type UiVariant } from '../core/
 @Component({
   selector: 'ui-input',
   standalone: true,
-  template: `
-    <input
-      [id]="id"
-      [type]="type"
-      [placeholder]="placeholder"
-      [disabled]="disabled"
-      [class]="classes()"
-      [value]="value"
-      (input)="onInput($event)"
-    />
-  `,
+  templateUrl: './ui-input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UiInputComponent {
