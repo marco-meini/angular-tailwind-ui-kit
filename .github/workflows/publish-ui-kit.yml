@@ -1,6 +1,10 @@
 name: Publish UI Kit
 
 on:
+  push:
+    branches:
+      - main
+      - master
   workflow_dispatch:
     inputs:
       version:
@@ -37,10 +41,23 @@ jobs:
       - name: Build UI Kit
         run: npm run build:ui-kit
 
+      - name: Resolve publish version
+        id: publish_version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VER="${{ inputs.version }}"
+          else
+            BASE=$(node -p "require('./projects/ui-kit/package.json').version")
+            SHORT=$(echo "${GITHUB_SHA}" | cut -c1-7)
+            VER="${BASE}-${GITHUB_RUN_NUMBER}.${SHORT}"
+          fi
+          echo "version=${VER}" >> "$GITHUB_OUTPUT"
+          echo "Publishing version: ${VER}"
+
       - name: Prepare package metadata for GitHub Packages
         env:
           REPO_OWNER: ${{ github.repository_owner }}
-          VERSION: ${{ inputs.version }}
+          VERSION: ${{ steps.publish_version.outputs.version }}
         run: |
           node -e "
           const fs = require('fs');
