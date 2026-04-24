@@ -1,6 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, finalize, map, switchMap } from 'rxjs/operators';
 import {
   UiAccordionComponent,
   UiAccordionItemComponent,
@@ -26,8 +30,16 @@ import {
   UiTabsComponent,
   UiTextareaComponent,
   UiTypeaheadComponent,
+  type UiOption,
 } from '@your-scope/ui-kit';
 import { SHOWCASE_CATALOG } from './showcase-catalog';
+
+interface MockApiPerson {
+  id: string;
+  name: string;
+  avatar?: string;
+  createdAt?: string;
+}
 
 @Component({
   selector: 'app-component-detail-page',
@@ -94,9 +106,15 @@ import { SHOWCASE_CATALOG } from './showcase-catalog';
               </div>
             }
             @case ('ui-progress') {
-              <div class="space-y-3">
-                <ui-progress [value]="35" />
-                <ui-progress [value]="72" />
+              <div class="flex flex-col gap-8">
+                <div class="space-y-1">
+                  <p class="text-xs uppercase tracking-wide text-slate-500">35%</p>
+                  <ui-progress [value]="35" />
+                </div>
+                <div class="space-y-1">
+                  <p class="text-xs uppercase tracking-wide text-slate-500">72%</p>
+                  <ui-progress [value]="72" />
+                </div>
               </div>
             }
             @case ('ui-label') {
@@ -210,12 +228,31 @@ import { SHOWCASE_CATALOG } from './showcase-catalog';
               </div>
             }
             @case ('ui-select-search') {
-              <ui-select-search label="Role" [items]="roles" [value]="role" (valueChange)="role = $event" />
-              <p class="text-sm text-slate-500">value={{ role ?? '-' }}</p>
+              <ui-select-search
+                label="Person"
+                placeholder="Search in preloaded list"
+                [items]="selectSearchApiItems"
+                [loading]="selectSearchLoading"
+                [value]="personSelectValue"
+                [nullable]="true"
+                [nullMenuOption]="false"
+                (valueChange)="onPersonSelectValueChange($event)"
+                (queryChange)="onSelectSearchQuery($event)"
+              />
+              <p class="text-sm text-slate-500">value={{ personSelectValue ?? '-' }}</p>
             }
             @case ('ui-typeahead') {
-              <ui-typeahead label="Dependency" [items]="dependencies" [value]="dependency" (valueChange)="dependency = $event" />
-              <p class="text-sm text-slate-500">value={{ dependency ?? '-' }}</p>
+              <ui-typeahead
+                label="Person"
+                placeholder="Type to search (remote)"
+                [items]="typeaheadApiItems"
+                [loading]="typeaheadLoading"
+                [value]="personTypeaheadValue"
+                [nullable]="true"
+                (valueChange)="onPersonTypeaheadValueChange($event)"
+                (queryChange)="onTypeaheadQuery($event)"
+              />
+              <p class="text-sm text-slate-500">value={{ personTypeaheadValue ?? '-' }}</p>
             }
             @case ('ui-datepicker') {
               <div class="space-y-6">
@@ -272,6 +309,10 @@ import { SHOWCASE_CATALOG } from './showcase-catalog';
 export class ComponentDetailPageComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private static readonly MOCK_SELECT_BASE = 'https://69ea358615c7e2d512698126.mockapi.io/tailwind-ui-kit/select';
 
   readonly catalog = SHOWCASE_CATALOG;
 
@@ -285,10 +326,18 @@ export class ComponentDetailPageComponent {
   alertDialogOpen = false;
   comboboxNullable: string | null = null;
   comboboxNotNullable: string | null = null;
-  role: string | null = null;
-  dependency: string | null = null;
+  personSelectValue: string | null = null;
+  personTypeaheadValue: string | null = null;
+  selectSearchApiItems: UiOption[] = [];
+  private selectSearchAllItems: UiOption[] = [];
+  typeaheadApiItems: UiOption[] = [];
+  selectSearchLoading = false;
+  typeaheadLoading = false;
   datePickerNullable: string | null = null;
   datePickerNotNullable: string | null = null;
+
+  private selectSearchLoaded = false;
+  private readonly typeaheadQuery$ = new Subject<string>();
 
   readonly sizeOptions = [
     { label: 'Small', value: 'sm' },
@@ -316,25 +365,104 @@ export class ComponentDetailPageComponent {
     { value: 'vue', label: 'Vue' },
     { value: 'svelte', label: 'Svelte' },
   ];
-  readonly roles = [
-    { value: 'developer', label: 'Developer' },
-    { value: 'designer', label: 'Designer' },
-    { value: 'pm', label: 'Product Manager' },
-    { value: 'qa', label: 'QA Engineer' },
-  ];
-  readonly dependencies = [
-    { value: 'cdk', label: '@angular/cdk' },
-    { value: 'tailwind', label: 'tailwindcss' },
-    { value: 'flatpickr', label: 'flatpickr' },
-    { value: 'rxjs', label: 'rxjs' },
-  ];
 
   constructor() {
     this.comboboxNotNullable = this.frameworks[0]?.value ?? null;
     this.datePickerNotNullable = this.defaultIsoDate();
-    this.route.paramMap.subscribe((params) => {
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
       this.activeId = params.get('id') ?? this.activeId;
+      if (this.activeId === 'ui-select-search') {
+        this.ensureSelectSearchLoaded();
+      }
     });
+    this.setupTypeaheadRemoteSearch();
+  }
+
+  /**
+   * Remote-only typeahead: each query is resolved by HTTP.
+   * switchMap keeps only the latest request result.
+   */
+  onTypeaheadQuery(term: string): void {
+    this.typeaheadQuery$.next(term);
+  }
+
+  onPersonTypeaheadValueChange(next: string | null): void {
+    this.personTypeaheadValue = next;
+    if (next == null) {
+      this.typeaheadApiItems = [];
+    }
+  }
+
+  onPersonSelectValueChange(next: string | null): void {
+    this.personSelectValue = next;
+    if (next == null) {
+      this.selectSearchApiItems = [];
+    }
+  }
+
+  onSelectSearchQuery(term: string): void {
+    if (!this.selectSearchAllItems.length) {
+      return;
+    }
+    if (!this.selectSearchApiItems.length && term.trim().length > 0) {
+      this.selectSearchApiItems = this.selectSearchAllItems.slice();
+    }
+  }
+
+  private mapPersonRowsToOptions(rows: MockApiPerson[]): UiOption[] {
+    return rows.map((row) => ({ value: String(row.id), label: row.name }));
+  }
+
+  private ensureSelectSearchLoaded(): void {
+    if (this.selectSearchLoaded) {
+      return;
+    }
+    this.selectSearchLoaded = true;
+    this.selectSearchLoading = true;
+    this.http
+      .get<MockApiPerson[]>(ComponentDetailPageComponent.MOCK_SELECT_BASE)
+      .pipe(
+        map((rows) => this.mapPersonRowsToOptions(rows)),
+        catchError(() => of([] as UiOption[])),
+        finalize(() => {
+          this.selectSearchLoading = false;
+        }),
+      )
+      .subscribe((items) => {
+        this.selectSearchAllItems = items;
+        this.selectSearchApiItems = items;
+      });
+  }
+
+  private setupTypeaheadRemoteSearch(): void {
+    this.typeaheadQuery$
+      .pipe(
+        debounceTime(140),
+        distinctUntilChanged(),
+        switchMap((term) => {
+          const trimmed = term.trim();
+          if (!trimmed) {
+            const keepForLabel = this.personTypeaheadValue
+              ? this.typeaheadApiItems.slice()
+              : ([] as UiOption[]);
+            return of(keepForLabel);
+          }
+          this.typeaheadLoading = true;
+          return this.http
+            .get<MockApiPerson[]>(ComponentDetailPageComponent.MOCK_SELECT_BASE, { params: { name: trimmed } })
+            .pipe(
+              map((rows) => this.mapPersonRowsToOptions(rows)),
+              catchError(() => of([] as UiOption[])),
+              finalize(() => {
+                this.typeaheadLoading = false;
+              }),
+            );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((items) => {
+        this.typeaheadApiItems = items;
+      });
   }
 
   get activeIndex(): number {

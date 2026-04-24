@@ -13,6 +13,7 @@ import { UiComboboxComponent, type UiOption } from './ui-combobox.component';
       [placeholder]="placeholder"
       [options]="options"
       [nullable]="nullable"
+      [nullMenuOption]="nullMenuOption"
       [nullLabel]="nullLabel"
       [variant]="variant"
       [size]="size"
@@ -22,6 +23,7 @@ import { UiComboboxComponent, type UiOption } from './ui-combobox.component';
       [loading]="loading"
       [value]="value"
       (valueChange)="onValueChange($event)"
+      (queryChange)="queryChange.emit($event)"
     />
   `,
 })
@@ -39,10 +41,12 @@ export class UiSelectSearchComponent {
   @Input() invalid = false;
   @Input() loading = false;
   @Input() nullable = false;
+  @Input() nullMenuOption = true;
   @Input() nullLabel = 'No selection';
   @Input() value: string | null = null;
 
   @Output() readonly valueChange = new EventEmitter<string | null>();
+  @Output() readonly queryChange = new EventEmitter<string>();
 
   protected onValueChange(nextValue: string | null): void {
     this.value = nextValue;

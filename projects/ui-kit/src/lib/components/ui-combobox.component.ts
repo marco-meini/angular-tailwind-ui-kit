@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { CdkConnectedOverlay, CdkOverlayOrigin, ConnectedPosition } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -80,11 +81,16 @@ const overlayPositions: ConnectedPosition[] = [
       <ng-template
         cdkConnectedOverlay
         [cdkConnectedOverlayOrigin]="origin"
-        [cdkConnectedOverlayOpen]="open && menuOptions.length > 0"
+        [cdkConnectedOverlayOpen]="open && (menuOptions.length > 0 || (remoteFilter && loading))"
         [cdkConnectedOverlayPositions]="positions"
         (overlayOutsideClick)="open = false"
       >
         <div class="ui-menu w-80 max-h-64 overflow-auto">
+          @if (remoteFilter && loading && menuOptions.length === 0) {
+            <div class="ui-menu-item ui-menu-item--muted cursor-default" aria-live="polite">
+              Searching...
+            </div>
+          }
           @for (option of menuOptions; track option.value; let idx = $index) {
             <button
               class="ui-menu-item"
@@ -116,13 +122,22 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
   @Input() disabled = false;
   @Input() invalid = false;
   @Input() loading = false;
-  /** When true, value may be `null` and a clear action + a null row in the list is shown. */
+  /** When true, value may be `null` and a clear (×) control is shown when a value is set. */
   @Input() nullable = false;
+  /** When true (and `nullable`), a synthetic first row with `nullLabel` is shown in the menu. When false, use only the × control to clear. */
+  @Input() nullMenuOption = true;
   /** Label for the synthetic null option (e.g. "No selection", "Nessun valore"). */
   @Input() nullLabel = 'No selection';
+  /**
+   * When true, options are assumed to be pre-filtered (e.g. remote API); the menu lists all
+   * current `options` without client-side label matching. Use for typeahead / server-driven lists.
+   */
+  @Input() remoteFilter = false;
   @Input() value: string | null = null;
 
   @Output() readonly valueChange = new EventEmitter<string | null>();
+  /** Current search token used to build the menu (for remote filtering). Not the display label when a value is selected. */
+  @Output() readonly queryChange = new EventEmitter<string>();
 
   open = false;
   /** Text in the field (label when selected, or what the user is typing). */
@@ -137,14 +152,44 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
   private onChanged: (value: string | null) => void = () => {};
   private readonly nullOptionValue = UI_COMBOBOX_NULL;
 
+  constructor(private readonly cdr: ChangeDetectorRef) {}
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['options'] || changes['items'] || changes['nullable'] || changes['nullLabel'] || changes['value']) {
-      this.syncQueryFromValue(this.value);
+    const valueChanged = !!changes['value'];
+    const optionsChanged = !!(changes['options'] || changes['items']);
+    const menuConfigChanged = !!(
+      changes['nullable'] ||
+      changes['nullMenuOption'] ||
+      changes['nullLabel']
+    );
+    const optionsOnly =
+      optionsChanged && !valueChanged && !menuConfigChanged && !changes['remoteFilter'];
+    const menuConfigOnly =
+      menuConfigChanged && !valueChanged && !optionsChanged && !changes['remoteFilter'];
+    const preserveSearchWhenEmpty = optionsOnly || menuConfigOnly;
+
+    if (
+      changes['options'] ||
+      changes['items'] ||
+      changes['nullable'] ||
+      changes['nullMenuOption'] ||
+      changes['nullLabel'] ||
+      changes['remoteFilter'] ||
+      changes['value']
+    ) {
+      this.syncQueryFromValue(this.value, { preserveSearchWhenEmpty });
     }
   }
 
   onFocusInput(): void {
-    this.filterTerm = '';
+    if (this.remoteFilter) {
+      // Keep the visible search text as the remote query (typeahead.js-style). Clearing to '' here
+      // used to emit an empty fetch while the input still showed text, leaving stale suggestions open.
+      this.filterTerm = this.hasValue() ? '' : this.query;
+    } else {
+      this.filterTerm = '';
+    }
+    this.emitFilterQuery();
     this.rebuildMenuOptions();
     this.open = true;
   }
@@ -191,6 +236,7 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
     this.rebuildMenuOptions();
     this.highlightedIndex = 0;
     this.open = true;
+    this.emitFilterQuery();
   }
 
   selectOption(option: UiOption): void {
@@ -201,6 +247,7 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
       this.open = false;
       this.onTouched();
       this.rebuildMenuOptions();
+      this.emitFilterQuery();
       return;
     }
     this.setValueAndEmit(option.value);
@@ -209,6 +256,7 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
     this.open = false;
     this.onTouched();
     this.rebuildMenuOptions();
+    this.emitFilterQuery();
   }
 
   clearValue(event: Event): void {
@@ -220,12 +268,18 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
     this.open = false;
     this.onTouched();
     this.rebuildMenuOptions();
+    this.emitFilterQuery();
   }
 
   onArrowDown(event: Event): void {
     const keyboardEvent = event as KeyboardEvent;
     if (!this.open) {
-      this.filterTerm = '';
+      if (this.remoteFilter) {
+        this.filterTerm = this.hasValue() ? '' : this.query;
+      } else {
+        this.filterTerm = '';
+      }
+      this.emitFilterQuery();
       this.rebuildMenuOptions();
       this.open = true;
       return;
@@ -261,8 +315,10 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
 
   private rebuildMenuOptions(): void {
     const term = this.filterTerm.toLowerCase().trim();
-    const userMatches = this.options.filter((option) => option.label.toLowerCase().includes(term));
-    if (!this.nullable) {
+    const userMatches = this.remoteFilter
+      ? [...this.options]
+      : this.options.filter((option) => option.label.toLowerCase().includes(term));
+    if (!this.nullable || !this.nullMenuOption) {
       this.menuOptions = userMatches;
       return;
     }
@@ -271,16 +327,32 @@ export class UiComboboxComponent implements ControlValueAccessor, OnChanges {
     this.menuOptions = nullMatches ? [nullRow, ...userMatches] : userMatches;
   }
 
-  private syncQueryFromValue(nextValue: string | null): void {
+  private syncQueryFromValue(
+    nextValue: string | null,
+    ctx: { preserveSearchWhenEmpty?: boolean } = {},
+  ): void {
+    const preserve = ctx.preserveSearchWhenEmpty ?? false;
     if (nextValue == null || nextValue === '') {
+      if (preserve) {
+        this.rebuildMenuOptions();
+        this.cdr.markForCheck();
+        return;
+      }
       this.query = '';
       this.filterTerm = '';
       this.rebuildMenuOptions();
+      this.emitFilterQuery();
       return;
     }
     const found = this.options.find((option) => option.value === nextValue);
     this.query = found?.label ?? '';
     this.filterTerm = '';
     this.rebuildMenuOptions();
+    this.emitFilterQuery();
+  }
+
+  private emitFilterQuery(): void {
+    this.queryChange.emit(this.filterTerm);
+    this.cdr.markForCheck();
   }
 }

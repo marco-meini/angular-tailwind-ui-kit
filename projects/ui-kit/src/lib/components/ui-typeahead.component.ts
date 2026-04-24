@@ -12,7 +12,9 @@ import { UiComboboxComponent, type UiOption } from './ui-combobox.component';
       [label]="label"
       [placeholder]="placeholder"
       [options]="options"
+      [remoteFilter]="true"
       [nullable]="nullable"
+      [nullMenuOption]="nullMenuOption"
       [nullLabel]="nullLabel"
       [variant]="variant"
       [size]="size"
@@ -22,6 +24,7 @@ import { UiComboboxComponent, type UiOption } from './ui-combobox.component';
       [loading]="loading"
       [value]="value"
       (valueChange)="onValueChange($event)"
+      (queryChange)="queryChange.emit($event)"
     />
   `,
 })
@@ -39,10 +42,13 @@ export class UiTypeaheadComponent {
   @Input() invalid = false;
   @Input() loading = false;
   @Input() nullable = false;
+  /** Typeahead defaults to clear via × only (no synthetic row in the menu). */
+  @Input() nullMenuOption = false;
   @Input() nullLabel = 'No selection';
   @Input() value: string | null = null;
 
   @Output() readonly valueChange = new EventEmitter<string | null>();
+  @Output() readonly queryChange = new EventEmitter<string>();
 
   protected onValueChange(nextValue: string | null): void {
     this.value = nextValue;
