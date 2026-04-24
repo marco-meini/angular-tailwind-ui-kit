@@ -8,6 +8,8 @@
     "build": "npm run build:ui-kit && npm run build:showcase",
     "build:ui-kit": "ng build ui-kit",
     "build:showcase": "ng build showcase",
+    "prepare:publish:ui-kit": "node -e \"const fs=require('fs');const cp=require('child_process');const p='dist/ui-kit/package.json';const pkg=JSON.parse(fs.readFileSync(p,'utf8'));const explicitScope=(process.env.NPM_SCOPE||'').trim();let inferredScope='';if(!explicitScope){try{const remote=cp.execSync('git config --get remote.origin.url',{stdio:['ignore','pipe','ignore']}).toString().trim();const m=remote.match(/github\\.com[:/]([^/]+)\\//);if(m&&m[1]) inferredScope=m[1];}catch{}}const scope=explicitScope||inferredScope;if(!pkg.name.startsWith('@')) pkg.name='@'+(scope||'REPLACE_WITH_ORG')+'/angular-tailwind-ui-kit';if(pkg.name.includes('REPLACE_WITH_ORG')){console.error('Unable to infer package scope. Set NPM_SCOPE (e.g. NPM_SCOPE=m-meini).');process.exit(1);}pkg.publishConfig={...(pkg.publishConfig||{}),registry:'https://npm.pkg.github.com'};fs.writeFileSync(p,JSON.stringify(pkg,null,2)+'\\n');console.log('Prepared',pkg.name,'for GitHub Packages');\"",
+    "publish:ui-kit:github": "npm run build:ui-kit && npm run prepare:publish:ui-kit && npm publish ./dist/ui-kit --access public",
     "watch": "ng build showcase --watch --configuration development",
     "test:ui-kit": "vitest run projects/ui-kit/src/lib/core/class-variants.spec.ts"
   },
