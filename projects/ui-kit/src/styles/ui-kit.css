@@ -1,0 +1,174 @@
+:root {
+  --ui-ring: 0 0 0 3px color-mix(in srgb, rgb(var(--ui-primary)) 30%, transparent);
+}
+
+.ui-card {
+  border: 1px solid rgb(var(--ui-border));
+  border-radius: var(--ui-radius);
+  background-color: rgb(var(--ui-bg));
+  color: rgb(var(--ui-fg));
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 0.06);
+}
+
+.ui-label {
+  display: inline-block;
+  color: rgb(var(--ui-fg));
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.ui-input {
+  width: 100%;
+  border-radius: calc(var(--ui-radius) - 2px);
+  font-size: 0.875rem;
+  padding: 0.625rem 0.75rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.ui-textarea,
+.ui-field {
+  width: 100%;
+  border: 1px solid rgb(var(--ui-border));
+  border-radius: calc(var(--ui-radius) - 2px);
+  background-color: rgb(var(--ui-bg));
+  color: rgb(var(--ui-fg));
+  font-size: 0.875rem;
+  padding: 0.625rem 0.75rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.ui-input::placeholder,
+.ui-textarea::placeholder,
+.ui-field::placeholder {
+  color: rgb(var(--ui-border));
+}
+
+.ui-input:focus-visible,
+.ui-textarea:focus-visible,
+.ui-field:focus-visible {
+  outline: none;
+  box-shadow: var(--ui-ring);
+  border-color: rgb(var(--ui-primary));
+}
+
+.ui-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ui-button {
+  border: 1px solid transparent;
+  border-radius: calc(var(--ui-radius) - 2px);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.5rem 0.875rem;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.ui-button--primary {
+  background-color: rgb(var(--ui-primary));
+  color: rgb(var(--ui-primary-contrast));
+}
+
+.ui-button--outline {
+  background-color: transparent;
+  border-color: rgb(var(--ui-border));
+  color: rgb(var(--ui-fg));
+}
+
+.ui-button--danger {
+  background-color: rgb(var(--ui-danger));
+  color: #fff;
+}
+
+.ui-button--danger:hover {
+  filter: brightness(0.92);
+}
+
+/*
+ * Modals / white popovers: global --ui-fg stays light for the dark shell, but children
+ * must use "on light" ink. Scope fixes here instead of overriding --ui-fg on the whole panel
+ * (nested form controls may still use dark surfaces).
+ */
+.ui-popover-surface .ui-button--outline {
+  border-color: rgb(var(--ui-border-on-light));
+  color: rgb(var(--ui-fg-on-light));
+}
+
+.ui-popover-surface .ui-button--outline:hover {
+  background-color: rgb(var(--ui-muted-on-light));
+}
+
+.ui-popover-surface .ui-menu-item {
+  color: rgb(var(--ui-fg-on-light));
+}
+
+.ui-popover-surface .ui-menu-item:hover,
+.ui-popover-surface .ui-menu-item--active {
+  background-color: rgb(var(--ui-muted-on-light));
+}
+
+.ui-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-stack-2 {
+  gap: 0.5rem;
+}
+
+.ui-stack-3 {
+  gap: 0.75rem;
+}
+
+.ui-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 960px) {
+  .ui-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.ui-menu {
+  border: 1px solid rgb(var(--ui-border));
+  border-radius: calc(var(--ui-radius) - 2px);
+  background-color: rgb(var(--ui-bg));
+  color: rgb(var(--ui-fg));
+  box-shadow: 0 8px 24px rgb(15 23 42 / 0.12);
+  padding: 0.25rem;
+}
+
+.ui-menu-item {
+  width: 100%;
+  text-align: left;
+  color: rgb(var(--ui-fg));
+  border: none;
+  background: transparent;
+  border-radius: calc(var(--ui-radius) - 4px);
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.ui-menu-item:hover,
+.ui-menu-item--active {
+  background-color: rgb(var(--ui-muted));
+}
+
+.ui-menu-item--muted {
+  font-style: italic;
+  color: rgb(var(--ui-border));
+}

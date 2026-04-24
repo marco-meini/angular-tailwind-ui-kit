@@ -1,0 +1,43 @@
+{
+  "name": "ui-kit-workspace",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "npm run start:showcase",
+    "start:showcase": "ng serve showcase",
+    "build": "npm run build:ui-kit && npm run build:showcase",
+    "build:ui-kit": "ng build ui-kit",
+    "build:showcase": "ng build showcase",
+    "prepare:publish:ui-kit": "node -e \"const fs=require('fs');const cp=require('child_process');const p='dist/ui-kit/package.json';const pkg=JSON.parse(fs.readFileSync(p,'utf8'));const explicitScope=(process.env.NPM_SCOPE||'').trim();let inferredScope='';if(!explicitScope){try{const remote=cp.execSync('git config --get remote.origin.url',{stdio:['ignore','pipe','ignore']}).toString().trim();const m=remote.match(/github\\.com[:/]([^/]+)\\//);if(m&&m[1]) inferredScope=m[1];}catch{}}const scope=explicitScope||inferredScope;if(!pkg.name.startsWith('@')) pkg.name='@'+(scope||'REPLACE_WITH_ORG')+'/angular-tailwind-ui-kit';if(pkg.name.includes('REPLACE_WITH_ORG')){console.error('Unable to infer package scope. Set NPM_SCOPE (e.g. NPM_SCOPE=m-meini).');process.exit(1);}pkg.publishConfig={...(pkg.publishConfig||{}),registry:'https://npm.pkg.github.com'};fs.writeFileSync(p,JSON.stringify(pkg,null,2)+'\\n');console.log('Prepared',pkg.name,'for GitHub Packages');\"",
+    "publish:ui-kit:github": "npm run build:ui-kit && npm run prepare:publish:ui-kit && npm publish ./dist/ui-kit --access public",
+    "watch": "ng build showcase --watch --configuration development",
+    "test:ui-kit": "vitest run projects/ui-kit/src/lib/core/class-variants.spec.ts"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.7",
+  "dependencies": {
+    "@angular/cdk": "^21.2.7",
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "flatpickr": "^4.6.13",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.7",
+    "@angular/cli": "^21.2.7",
+    "@angular/compiler-cli": "^21.2.0",
+    "@tailwindcss/postcss": "^4.2.3",
+    "jsdom": "^28.0.0",
+    "ng-packagr": "^21.2.0",
+    "postcss": "^8.5.10",
+    "prettier": "^3.8.1",
+    "tailwindcss": "^4.2.3",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}

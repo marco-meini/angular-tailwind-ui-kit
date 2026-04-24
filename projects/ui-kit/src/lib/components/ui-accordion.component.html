@@ -1,0 +1,7 @@
+    <section class="space-y-2">
+      @for (item of items; track item.title) {
+        <ui-accordion-item [title]="item.title">
+          {{ item.content }}
+        </ui-accordion-item>
+      }
+    </section>
