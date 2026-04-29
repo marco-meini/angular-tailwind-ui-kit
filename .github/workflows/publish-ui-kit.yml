@@ -2,9 +2,8 @@ name: Publish UI Kit
 
 on:
   push:
-    branches:
-      - main
-      - master
+    paths:
+      - projects/ui-kit/package.json
   workflow_dispatch:
     inputs:
       version:
@@ -35,26 +34,42 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Detect version change
+        if: github.event_name == 'push'
+        id: version_check
+        run: |
+          PREV="$(git show "${{ github.event.before }}:projects/ui-kit/package.json" 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).version" || true)"
+          CURR="$(node -p "require('./projects/ui-kit/package.json').version")"
+          if [ -n "$PREV" ] && [ "$PREV" = "$CURR" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Version unchanged ($CURR), publish will be skipped."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Version changed: ${PREV:-<none>} -> $CURR"
+          fi
+
       - name: Test UI Kit
+        if: github.event_name == 'workflow_dispatch' || steps.version_check.outputs.changed == 'true'
         run: npm run test:ui-kit
 
       - name: Build UI Kit
+        if: github.event_name == 'workflow_dispatch' || steps.version_check.outputs.changed == 'true'
         run: npm run build:ui-kit
 
       - name: Resolve publish version
+        if: github.event_name == 'workflow_dispatch' || steps.version_check.outputs.changed == 'true'
         id: publish_version
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             VER="${{ inputs.version }}"
           else
-            BASE=$(node -p "require('./projects/ui-kit/package.json').version")
-            SHORT=$(echo "${GITHUB_SHA}" | cut -c1-7)
-            VER="${BASE}-${GITHUB_RUN_NUMBER}.${SHORT}"
+            VER="$(node -p "require('./projects/ui-kit/package.json').version")"
           fi
           echo "version=${VER}" >> "$GITHUB_OUTPUT"
           echo "Publishing version: ${VER}"
 
       - name: Prepare package metadata for GitHub Packages
+        if: github.event_name == 'workflow_dispatch' || steps.version_check.outputs.changed == 'true'
         env:
           REPO_OWNER: ${{ github.repository_owner }}
           VERSION: ${{ steps.publish_version.outputs.version }}
@@ -71,4 +86,5 @@ jobs:
           "
 
       - name: Publish to GitHub Packages
+        if: github.event_name == 'workflow_dispatch' || steps.version_check.outputs.changed == 'true'
         run: npm publish ./dist/ui-kit --access public
