@@ -1,5 +1,9 @@
 # Tailwind UI Kit Workspace
 
+[![Deploy Showcase to GitHub Pages](https://github.com/marco-meini/angular-tailwind-ui-kit/actions/workflows/deploy-showcase-pages.yml/badge.svg)](https://github.com/marco-meini/angular-tailwind-ui-kit/actions/workflows/deploy-showcase-pages.yml)
+
+Live demo: [https://marco-meini.github.io/angular-tailwind-ui-kit/](https://marco-meini.github.io/angular-tailwind-ui-kit/)
+
 Angular workspace containing:
 
 - `projects/ui-kit`: standalone UI library (`@your-scope/ui-kit`).
