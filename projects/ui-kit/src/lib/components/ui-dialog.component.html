@@ -9,7 +9,9 @@
           <ng-template #defaultTemplate><ng-content /></ng-template>
           <footer class="mt-6 flex justify-end gap-2">
             <button type="button" class="ui-button ui-button--outline" (click)="requestClose()">{{ cancelLabel }}</button>
+            @if (showConfirm) {
             <button type="button" [class]="confirmButtonClass()" (click)="confirm.emit()">{{ confirmLabel }}</button>
+            }
           </footer>
         </div>
       </div>

@@ -14,6 +14,7 @@ export class UiDialogComponent {
   @Input() title = 'Dialog';
   @Input() cancelLabel = 'Cancel';
   @Input() confirmLabel = 'Confirm';
+  @Input() showConfirm = true;
   @Input() confirmVariant: UiDialogConfirmVariant = 'primary';
   @Input() content?: TemplateRef<unknown>;
   @Input() set isOpen(value: boolean) {
